@@ -51,7 +51,11 @@
       .carousel-caption > h1 {
         margin-bottom: 3rem;
       }
-
+      #rows-container {
+        display: flex;
+        justify-content: center;
+        width: 70vw;
+      }
       .row {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
@@ -65,7 +69,7 @@
         border-radius: 5px;
         padding: 2rem 0.5rem;
         margin: 10px;
-        width: 90%;
+        width: 80%;
       }
 
       .fw-normal {
@@ -74,6 +78,18 @@
     </style>
   </head>
   <body>
+    <script>
+      window.onload = function () {
+        const cnt = document.getElementsByClassName("row")[0].childElementCount;
+        for (i = 1; i <= cnt; i++) {
+          const detail_btn = document.querySelector("#detail-btn-" + i);
+          const name = document.querySelector("#card-" + i).innerText;
+
+          detail_btn.href = "/detail.html?name=" + name;
+        }
+      };
+    </script>
+
     <div class="header"><div>INT's</div></div>
     <div class="main">
       <div id="myCarousel" class="carousel slide mb-6">
@@ -211,12 +227,14 @@
                 fill="var(--bs-secondary-color)"
               ></rect>
             </svg>
-            <h2 class="fw-normal">김태완</h2>
+            <h2 class="fw-normal" id="card-1">김태완</h2>
             <p>
               Some representative placeholder content for the three columns of
               text below the carousel. This is the first column.
             </p>
-            <p><a class="btn btn-secondary" href="#">View details »</a></p>
+            <p>
+              <a class="btn btn-secondary" id="detail-btn-1">View details »</a>
+            </p>
           </div>
           <!-- /.col-lg-3 -->
           <div class="col-lg-3">
@@ -237,12 +255,14 @@
                 fill="var(--bs-secondary-color)"
               ></rect>
             </svg>
-            <h2 class="fw-normal">오지석</h2>
+            <h2 class="fw-normal" id="card-2">오지석</h2>
             <p>
               Another exciting bit of representative placeholder content. This
               time, we've moved on to the second column.
             </p>
-            <p><a class="btn btn-secondary" href="#">View details »</a></p>
+            <p>
+              <a class="btn btn-secondary" id="detail-btn-2">View details »</a>
+            </p>
           </div>
           <!-- /.col-lg-3 -->
           <div class="col-lg-3">
@@ -263,12 +283,14 @@
                 fill="var(--bs-secondary-color)"
               ></rect>
             </svg>
-            <h2 class="fw-normal">김도균</h2>
+            <h2 class="fw-normal" id="card-3">김도균</h2>
             <p>
               And lastly this, the third column of representative placeholder
               content.
             </p>
-            <p><a class="btn btn-secondary" href="#">View details »</a></p>
+            <p>
+              <a class="btn btn-secondary" id="detail-btn-3">View details »</a>
+            </p>
           </div>
           <!-- /.col-lg-3 -->
           <div class="col-lg-3">
@@ -289,12 +311,14 @@
                 fill="var(--bs-secondary-color)"
               ></rect>
             </svg>
-            <h2 class="fw-normal">이수진</h2>
+            <h2 class="fw-normal" id="card-4">이수진</h2>
             <p>
               And lastly this, the third column of representative placeholder
               content.
             </p>
-            <p><a class="btn btn-secondary" href="#">View details »</a></p>
+            <p>
+              <a class="btn btn-secondary" id="detail-btn-4">View details »</a>
+            </p>
           </div>
           <div class="col-lg-3">
             <svg
@@ -314,12 +338,14 @@
                 fill="var(--bs-secondary-color)"
               ></rect>
             </svg>
-            <h2 class="fw-normal">추가</h2>
+            <h2 class="fw-normal" id="card-5">추가</h2>
             <p>
               And lastly this, the third column of representative placeholder
               content.
             </p>
-            <p><a class="btn btn-secondary" href="#">View details »</a></p>
+            <p>
+              <a class="btn btn-secondary" id="detail-btn-5">View details »</a>
+            </p>
           </div>
         </div>
       </div>
