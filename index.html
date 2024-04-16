@@ -340,12 +340,61 @@
             </svg>
             <h2 class="fw-normal" id="card-5">추가</h2>
             <p>
-              And lastly this, the third column of representative placeholder
-              content.
+              새 멤버를 추가하세요.
             </p>
             <p>
-              <a class="btn btn-secondary" id="detail-btn-5">View details »</a>
+              <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addModal">멤버 추가하기 »</button>
             </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+      Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">새 멤버 추가</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="name">이름</span>
+              <input type="text" class="form-control" aria-label="name" aria-describedby="name">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="mbti">MBTI</span>
+              <input type="text" class="form-control" aria-label="mbti" aria-describedby="mbti">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="strength">장점</span>
+              <input type="text" class="form-control" aria-label="strength" aria-describedby="strength">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="style">스타일</span>
+              <input type="text" class="form-control" aria-label="style" aria-describedby="style">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="blog">블로그 주소</span>
+              <input type="text" class="form-control" aria-label="blog" aria-describedby="blog">
+            </div>
+
+            <!--파일 업로드로 수정하는게 좋을것 같음-->
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="image">이미지 주소</span>
+              <input type="text" class="form-control" aria-label="image" aria-describedby="image">
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <button type="button" class="btn btn-primary">추가하기</button>
           </div>
         </div>
       </div>
