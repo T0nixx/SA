@@ -18,10 +18,11 @@
     >
       const myCarouselElement = document.querySelector('#myCarousel')
 
-      const carousel = new bootstrap.Carousel(myCarouselElement, {
-        interval: 2000,
-        touch: false
-      })
+      // 자동으로 돌아가는 부분
+      // const carousel = new bootstrap.Carousel(myCarouselElement, {
+      //   interval: 2000,
+      //   touch: false
+      // })
     </script>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap");
@@ -53,6 +54,7 @@
 
       .carousel-caption {
         top: 1.5rem;
+        text-align: center !important;
       }
       .carousel-caption > h1 {
         margin-bottom: 3rem;
