@@ -30,14 +30,15 @@
       }
 
       .header {
-        background-color: #e1e5b6;
+        padding-top: 10px;
+        background-color: #b7ffb2;
         height: 100px;
         align-items: center;
         justify-content: center;
         display: flex;
       }
       .header > div {
-        color: #426b1f;
+        color: #000000;
         font-family: "Newsreader", serif;
         font-size: 3rem;
       }
@@ -67,6 +68,7 @@
       .row {
         display: flex;
         justify-content: space-between;
+        align-items: center;
       }
 
       .col-lg-3 {
@@ -85,8 +87,8 @@
         margin: 25px auto 0 auto;
         width: 1330px;
         height: 500px;
-        padding: 20px;
-        box-shadow: 1px 0 1px 1px gray;
+        padding: 80px;
+        background-color: rgb(255, 253, 231);
       }
 
       .update{
@@ -97,6 +99,14 @@
         justify-content: end;
       }
 
+      .card {
+        justify-content: center;
+      }
+      #a {
+    color: #000;
+    text-decoration: none;
+      }
+
     </style>
   </head>
   <body>
@@ -105,15 +115,21 @@
       <div class="card mb-3 detail">
         <div class="row g-0">
           <div class="col-md-4">
-            <img src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcSS9dlbtI3FsX2ddmU6dt6O86CwjMV4rXZNIvmSvQ77bO7x6KtirIXRhJ7sdfoBz1z4n3G4jz8RvEShcxqAFPnoNFG19b46s9kOGYKEBg" class="img-fluid rounded-start" alt="...">
+            <img src="https://postfiles.pstatic.net/20130820_270/tkdgus830416_1376927752539W7lfj_JPEG/23.jpg?type=w1" width="300" height="300" class="img-fluid rounded-start" alt="...">
           </div>
           <div class="col-md-8">
             <div class="card-body">
+                <hr>
               <h3 class="card-title">김도균</h3>
-              <p class="card-text">MBTI : </p>
+              <hr>
+              <h5 class="card-text"> MBTI : </h5>
+              <hr>
               <p class="card-text">나만의 장점 : </p>
+              <hr>
               <p class="card-text">자신의 스타일 : </p>
-              <a class="card-text">블로그 주소 넣을 공간</a>
+              <hr>
+              <a id="a" class="card-text">블로그 : </a>
+              <hr>
             </div>
           </div>
         </div>
