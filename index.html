@@ -18,11 +18,11 @@
     ></script>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap");
-  
+
       body {
         margin: 0;
       }
-  
+
       .header {
         padding-top: 40px;
         padding-left: 3px;
@@ -32,19 +32,19 @@
         justify-content: center;
         display: flex;
       }
-  
-      .header>div {
+
+      .header > div {
         color: #000000;
         font-family: "Newsreader", serif;
         font-size: 3rem;
       }
-  
+
       .main {
         display: flex;
         flex-direction: column;
         position: relative;
       }
-  
+
       #myCarousel {
         width: 1330px;
         height: 512px;
@@ -55,28 +55,28 @@
         justify-content: center;
         align-items: center;
       }
-  
+
       .carousel-caption {
         top: 1.5rem;
         text-align: center !important;
       }
-  
-      .carousel-caption>h1 {
+
+      .carousel-caption > h1 {
         margin-bottom: 3rem;
       }
-  
+
       #rows-container {
         display: flex;
         justify-content: center;
         width: 70vw;
       }
-  
+
       .row {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         justify-items: center;
       }
-  
+
       .col-lg-3 {
         text-align: center;
         border-style: solid;
@@ -86,7 +86,11 @@
         margin: 10px;
         width: 90%;
       }
-  
+
+      .col-lg-3 > img {
+        border-radius: 50%;
+      }
+
       .bar {
         width: 210px;
         height: 5px;
@@ -95,7 +99,7 @@
         margin-bottom: 0px;
         background-color: black;
       }
-  
+
       .carousel-inner {
         border-radius: 10px;
       }
@@ -117,18 +121,20 @@
         getDocs,
         getFirestore,
         addDoc,
+        query,
+        orderBy,
       } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-      function make_card(name, image, count, uid) {
+      function make_card(name, image, uid) {
         return `<div class="col-lg-3">
             <img height=140 width= 140 src="${image}" alt="...">
-            <h2 class="fw-normal" id="card-${count}">${name}</h2>
+            <h2 class="fw-normal">${name}</h2>
             <p>
               And lastly this, the third column of representative placeholder
               content.
             </p>
             <p>
-              <a class="btn btn-secondary" id="detail-btn-${count}">View details »</a>
+              <a class="btn btn-secondary detail-btn">View details »</a>
             </p>
             <p class="uid">${uid}</p>
           </div>`;
@@ -148,15 +154,17 @@
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
 
-      const querySnapshot = await getDocs(collection(db, "cards"));
+      const querySnapshot = await getDocs(
+        query(collection(db, "cards"), orderBy("creationTimestamp"))
+      );
       const card_rows = $("#card-rows");
-      querySnapshot.forEach((doc, i) => {
+      querySnapshot.forEach((doc) => {
         const { name, image } = doc.data();
-        const temp_html = make_card(name, image, i, doc.id);
+        const temp_html = make_card(name, image, doc.id);
         card_rows.append(temp_html);
       });
 
-      let detail_btn_click = (uid)=> () => {
+      let detail_btn_click = (uid) => () => {
         let current_href = window.location.href;
         if (current_href.split("/").slice(-1)[0].includes("html")) {
           window.location =
@@ -166,14 +174,16 @@
         } else {
           window.location = current_href + "detail.html?uid=" + uid;
         }
-      }
+      };
 
-      Array.from(card_rows.children()).forEach((card, i) => {
+      Array.from(card_rows.children()).forEach((card) => {
         let uid = card.getElementsByClassName("uid");
-        if (i == 0) return
+        let detail_button = card.getElementsByClassName("detail-btn")[0];
         // onclick은 parameter를 넘겨줄 수 없어서 커링으로 일단 인자를 받도록 함
-        card.onclick=detail_btn_click(card.getElementsByClassName("uid")[0].textContent);
-      })
+        detail_button.onclick = detail_btn_click(
+          card.getElementsByClassName("uid")[0].textContent
+        );
+      });
 
       const add_card_form = `<div class="col-lg-3">
             <svg
@@ -217,14 +227,23 @@
         const image = document.querySelector("input[id=image]").value;
         const password = document.querySelector("input[id=pwd]").value;
 
-
-        const doc = { name, mbti, strength, style, blog, image, password, isMember:false };
+        const doc = {
+          name,
+          mbti,
+          strength,
+          style,
+          blog,
+          image,
+          password,
+          isMember: false,
+          creationTimestamp: Date.now(),
+        };
 
         const docref = await addDoc(collection(db, "cards"), doc);
         let card_rows = $("#card-rows");
         const cards_cnt = card_rows.children().length;
-        
-        let temp_html = make_card(name, image, cards_cnt);
+
+        let temp_html = make_card(name, image, docref.id);
 
         card_rows.children().last().remove();
         card_rows.append(temp_html);
@@ -367,265 +386,124 @@
         </button>
       </div>
       <div class="container" id="rows-container">
-        <div class="row" id="card-rows">
-          <!-- <div class="col-lg-3">
-            <svg
-              class="bd-placeholder-img rounded-circle"
-              width="140"
-              height="140"
-              xmlns="http://www.w3.org/2000/svg"
-              role="img"
-              aria-label="Placeholder"
-              preserveAspectRatio="xMidYMid slice"
-              focusable="false"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <h2 class="fw-normal" id="card-1">김태완</h2>
-            <p>
-              Some representative placeholder content for the three columns of
-              text below the carousel. This is the first column.
-            </p>
-            <p>
-              <a class="btn btn-secondary" id="detail-btn-1">View details »</a>
-            </p>
-          </div>
-          <div class="col-lg-3">
-            <svg
-              class="bd-placeholder-img rounded-circle"
-              width="140"
-              height="140"
-              xmlns="http://www.w3.org/2000/svg"
-              role="img"
-              aria-label="Placeholder"
-              preserveAspectRatio="xMidYMid slice"
-              focusable="false"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <h2 class="fw-normal" id="card-2">오지석</h2>
-            <p>
-              Another exciting bit of representative placeholder content. This
-              time, we've moved on to the second column.
-            </p>
-            <p>
-              <a class="btn btn-secondary" id="detail-btn-2">View details »</a>
-            </p>
-          </div>
-          <div class="col-lg-3">
-            <svg
-              class="bd-placeholder-img rounded-circle"
-              width="140"
-              height="140"
-              xmlns="http://www.w3.org/2000/svg"
-              role="img"
-              aria-label="Placeholder"
-              preserveAspectRatio="xMidYMid slice"
-              focusable="false"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <h2 class="fw-normal" id="card-3">김도균</h2>
-            <p>
-              And lastly this, the third column of representative placeholder
-              content.
-            </p>
-            <p>
-              <a class="btn btn-secondary" id="detail-btn-3">View details »</a>
-            </p>
-          </div>
-          <div class="col-lg-3">
-            <svg
-              class="bd-placeholder-img rounded-circle"
-              width="140"
-              height="140"
-              xmlns="http://www.w3.org/2000/svg"
-              role="img"
-              aria-label="Placeholder"
-              preserveAspectRatio="xMidYMid slice"
-              focusable="false"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <h2 class="fw-normal" id="card-4">이수진</h2>
-            <p>
-              And lastly this, the third column of representative placeholder
-              content.
-            </p>
-            <p>
-              <a class="btn btn-secondary" id="detail-btn-4">View details »</a>
-            </p>
-          </div>
-          <div class="col-lg-3">
-            <svg
-              class="bd-placeholder-img rounded-circle"
-              width="140"
-              height="140"
-              xmlns="http://www.w3.org/2000/svg"
-              role="img"
-              aria-label="Placeholder"
-              preserveAspectRatio="xMidYMid slice"
-              focusable="false"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <h2 class="fw-normal" id="card-5">추가</h2>
-            <p>새 멤버를 추가하세요.</p>
-            <p>
-              <button
-                class="btn btn-secondary"
-                data-bs-toggle="modal"
-                data-bs-target="#addModal"
-              >
-                멤버 추가하기 »
-              </button>
-            </p>
-          </div>
-        </div>
+        <div class="row" id="card-rows"></div>
       </div>
-    </div>
+      <div
+        class="modal fade"
+        id="addModal"
+        tabindex="-1"
+        aria-labelledby="addModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                새 멤버 추가
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="input-group mb-3">
+                <span class="input-group-text">이름</span>
+                <input
+                  id="name"
+                  type="text"
+                  class="form-control"
+                  aria-label="name"
+                  aria-describedby="name"
+                />
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text">MBTI</span>
+                <input
+                  id="mbti"
+                  type="text"
+                  class="form-control"
+                  aria-label="mbti"
+                  aria-describedby="mbti"
+                />
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text">장점</span>
+                <input
+                  id="strength"
+                  type="text"
+                  class="form-control"
+                  aria-label="strength"
+                  aria-describedby="strength"
+                />
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text">스타일</span>
+                <input
+                  id="style"
+                  type="text"
+                  class="form-control"
+                  aria-label="style"
+                  aria-describedby="style"
+                />
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text">블로그 주소</span>
+                <input
+                  id="blog"
+                  type="text"
+                  class="form-control"
+                  aria-label="blog"
+                  aria-describedby="blog"
+                />
+              </div>
 
-  -->
-     <div
-      class="modal fade"
-      id="addModal"
-      tabindex="-1"
-      aria-labelledby="addModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              새 멤버 추가
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <div class="input-group mb-3">
-              <span class="input-group-text">이름</span>
-              <input
-                id="name"
-                type="text"
-                class="form-control"
-                aria-label="name"
-                aria-describedby="name"
-              />
+              <div class="input-group mb-3">
+                <span class="input-group-text">이미지 주소</span>
+                <input
+                  id="image"
+                  type="text"
+                  class="form-control"
+                  aria-label="image"
+                  aria-describedby="image"
+                />
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text">비밀번호</span>
+                <input
+                  id="pwd"
+                  type="password"
+                  class="form-control"
+                  aria-label="pwd"
+                  aria-describedby="pwd"
+                />
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text">비밀번호 확인</span>
+                <input
+                  id="pwdCheck"
+                  type="password"
+                  class="form-control"
+                  aria-label="pwdCheck"
+                  aria-describedby="pwdCheck"
+                />
+              </div>
             </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">MBTI</span>
-              <input
-                id="mbti"
-                type="text"
-                class="form-control"
-                aria-label="mbti"
-                aria-describedby="mbti"
-              />
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                id="close-btn"
+              >
+                닫기
+              </button>
+              <button type="button" class="btn btn-primary" id="add-btn">
+                추가하기
+              </button>
             </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">장점</span>
-              <input
-                id="strength"
-                type="text"
-                class="form-control"
-                aria-label="strength"
-                aria-describedby="strength"
-              />
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">스타일</span>
-              <input
-                id="style"
-                type="text"
-                class="form-control"
-                aria-label="style"
-                aria-describedby="style"
-              />
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">블로그 주소</span>
-              <input
-                id="blog"
-                type="text"
-                class="form-control"
-                aria-label="blog"
-                aria-describedby="blog"
-              />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">이미지 주소</span>
-              <input
-                id="image"
-                type="text"
-                class="form-control"
-                aria-label="image"
-                aria-describedby="image"
-              />
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">비밀번호</span>
-              <input
-                id="pwd"
-                type="password"
-                class="form-control"
-                aria-label="pwd"
-                aria-describedby="pwd"
-              />
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">비밀번호 확인</span>
-              <input
-                id="pwdCheck"
-                type="password"
-                class="form-control"
-                aria-label="pwdCheck"
-                aria-describedby="pwdCheck"
-              />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-              id="close-btn"
-            >
-              닫기
-            </button>
-            <button type="button" class="btn btn-primary" id="add-btn">
-              추가하기
-            </button>
           </div>
         </div>
       </div>
