@@ -334,9 +334,12 @@
 
     document.querySelector(".header > div").onclick = () => {
       if (window.location.pathname.split("/").slice(-1)[0].includes("html")) {
-        window.location.href = window.location.origin + window.location.pathname.split("/").slice(0,-1).join("/")
+        window.location.href =
+          window.location.origin +
+          window.location.pathname.split("/").slice(0, -1).join("/") +
+          "/";
       } else {
-        window.location.href = window.location.origin
+        window.location.href = window.location.origin;
       }
     };
   </script>
