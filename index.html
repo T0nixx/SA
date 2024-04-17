@@ -76,20 +76,57 @@
         margin-top: 2rem;
       }
     </style>
-  </head>
-  <body>
-    <script>
-      window.onload = function () {
-        const cnt = document.getElementsByClassName("row")[0].childElementCount;
-        for (i = 1; i <= cnt; i++) {
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+      import {
+        collection,
+        getDocs,
+        getFirestore,
+      } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBym678ZRXfWjzc5Us-JTMV9ljzXLgtM4I",
+        authDomain: "nbc-sa.firebaseapp.com",
+        projectId: "nbc-sa",
+        storageBucket: "nbc-sa.appspot.com",
+        messagingSenderId: "479626176899",
+        appId: "1:479626176899:web:5c5ddc73093628df63aeb6",
+        measurementId: "G-QD9WK29W17",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const querySnapshot = await getDocs(collection(db, "cards"));
+      querySnapshot.forEach((doc) => {
+        console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+      });
+
+      // getDocs가 끝나면 cnt 숫자를 바꿔줘야함
+      // 추가를 뺀 나머지 카드들의 수
+      const cnt =
+        document.getElementsByClassName("row")[0].childElementCount - 1;
+      for (let i = 1; i <= cnt; i++) {
           const detail_btn = document.querySelector("#detail-btn-" + i);
           const name = document.querySelector("#card-" + i).innerText;
 
-          detail_btn.href = "/detail.html?name=" + name;
+        detail_btn.onclick = () => {
+          let current_href = window.location.href;
+          if (current_href.split("/").slice(-1)[0].includes("html")) {
+            window.location =
+              current_href.split("/").slice(0, -1).join("/") +
+              "/detail.html?name=" +
+              name;
+          } else {
+            window.location = current_href + "detail.html?name=" + name;
         }
       };
+      }
     </script>
-
+  </head>
+  <body>
     <div class="header"><div>INT's</div></div>
     <div class="main">
       <div id="myCarousel" class="carousel slide mb-6">
