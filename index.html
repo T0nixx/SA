@@ -10,7 +10,7 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
       integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
@@ -140,7 +140,17 @@
         document.querySelector("#close-btn").click();
       }
 
-      document.querySelector("#add-btn").onclick = addCard;
+      function validation() {
+        const pwd = $('#pwd').val();
+        const pwdCheck = $('#pwdCheck').val();
+        if(pwd !== pwdCheck) {
+          alert('비밀번호가 일치하지 않습니다.');
+        }else {
+          addCard();
+        }
+      }
+
+      document.querySelector("#add-btn").onclick = validation;
     </script>
   </head>
   <body>
@@ -495,6 +505,26 @@
                 class="form-control"
                 aria-label="image"
                 aria-describedby="image"
+              />
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">비밀번호</span>
+              <input
+                id="pwd"
+                type="password"
+                class="form-control"
+                aria-label="pwd"
+                aria-describedby="pwd"
+              />
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">비밀번호 확인</span>
+              <input
+                id="pwdCheck"
+                type="password"
+                class="form-control"
+                aria-label="pwdCheck"
+                aria-describedby="pwdCheck"
               />
             </div>
           </div>
