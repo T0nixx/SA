@@ -100,8 +100,12 @@
       .fw-normal {
         margin-top: 2rem;
       }
+
+      .uuid {
+        display: none;
+      }
     </style>
-  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="module">
       // Import the functions you need from the SDKs you need
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
@@ -111,6 +115,21 @@
         getFirestore,
         addDoc,
       } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+      function make_card(name, image, count, uuid) {
+        return `<div class="col-lg-3">
+            <img height=140 width= 140 src="${image}" alt="...">
+            <h2 class="fw-normal" id="card-${count}">${name}</h2>
+            <p>
+              And lastly this, the third column of representative placeholder
+              content.
+            </p>
+            <p>
+              <a class="btn btn-secondary" id="detail-btn-${count}">View details »</a>
+            </p>
+            <p class="uuid">${uuid}</p>
+          </div>`;
+      }
 
       const firebaseConfig = {
         apiKey: "AIzaSyBym678ZRXfWjzc5Us-JTMV9ljzXLgtM4I",
@@ -127,52 +146,98 @@
       const db = getFirestore(app);
 
       const querySnapshot = await getDocs(collection(db, "cards"));
-      querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+      const card_rows = $("#card-rows");
+      querySnapshot.forEach((doc, i) => {
+        const { name, image } = doc.data();
+        const temp_html = make_card(name, image, i, doc.id);
+        card_rows.append(temp_html);
       });
 
-      // getDocs가 끝나면 cnt 숫자를 바꿔줘야함
-      // 추가를 뺀 나머지 카드들의 수
-      const cnt =
-        document.getElementsByClassName("row")[0].childElementCount - 1;
-      for (let i = 1; i <= cnt; i++) {
-        const detail_btn = document.querySelector("#detail-btn-" + i);
-        const name = document.querySelector("#card-" + i).innerText;
-
-        detail_btn.onclick = () => {
-          let current_href = window.location.href;
-          if (current_href.split("/").slice(-1)[0].includes("html")) {
-            window.location =
-              current_href.split("/").slice(0, -1).join("/") +
-              "/detail.html?name=" +
-              name;
-          } else {
-            window.location = current_href + "detail.html?name=" + name;
-          }
-        };
+      let detail_btn_click = (uuid)=> () => {
+        let current_href = window.location.href;
+        if (current_href.split("/").slice(-1)[0].includes("html")) {
+          window.location =
+            current_href.split("/").slice(0, -1).join("/") +
+            "/detail.html?uuid=" +
+            uuid;
+        } else {
+          window.location = current_href + "detail.html?uuid=" + uuid;
+        }
       }
 
-      async function addCard() {
+      Array.from(card_rows.children()).forEach((card, i) => {
+        let uuid = card.getElementsByClassName("uuid");
+        if (i == 0) return
+        // onclick은 parameter를 넘겨줄 수 없어서 커링으로 일단 인자를 받도록 함
+        card.onclick=detail_btn_click(card.getElementsByClassName("uuid")[0].textContent);
+      })
+
+      const add_card_form = `<div class="col-lg-3">
+            <svg
+              class="bd-placeholder-img rounded-circle"
+              width="140"
+              height="140"
+              xmlns="http://www.w3.org/2000/svg"
+              role="img"
+              aria-label="Placeholder"
+              preserveAspectRatio="xMidYMid slice"
+              focusable="false"
+            >
+              <title>Placeholder</title>
+              <rect
+                width="100%"
+                height="100%"
+                fill="var(--bs-secondary-color)"
+              ></rect>
+            </svg>
+            <h2 class="fw-normal" id="add_card">추가</h2>
+            <p>새 멤버를 추가하세요.</p>
+            <p>
+              <button
+                class="btn btn-secondary"
+                data-bs-toggle="modal"
+                data-bs-target="#addModal"
+              >
+                멤버 추가하기 »
+              </button>
+            </p>
+          </div>`;
+
+      card_rows.append(add_card_form);
+
+      async function add_card() {
         const name = document.querySelector("input[id=name]").value;
         const mbti = document.querySelector("input[id=mbti]").value;
         const strength = document.querySelector("input[id=strength]").value;
         const style = document.querySelector("input[id=style]").value;
         const blog = document.querySelector("input[id=blog]").value;
         const image = document.querySelector("input[id=image]").value;
+        const password = document.querySelector("input[id=pwd]").value;
 
-        const doc = { name, mbti, strength, style, blog, image };
-        console.log(JSON.stringify(doc));
-        await addDoc(collection(db, "cards"), doc);
+
+        const doc = { name, mbti, strength, style, blog, image, password, isMember:false };
+
+        const docref = await addDoc(collection(db, "cards"), doc);
+        let card_rows = $("#card-rows");
+        const cards_cnt = card_rows.children().length;
+        
+        let temp_html = make_card(name, image, cards_cnt);
+
+        card_rows.children().last().remove();
+        card_rows.append(temp_html);
+        card_rows.children().last().click(detail_btn_click(docref.id));
+        card_rows.append(add_card_form);
+
         document.querySelector("#close-btn").click();
       }
 
       function validation() {
-        const pwd = $('#pwd').val();
-        const pwdCheck = $('#pwdCheck').val();
-        if(pwd !== pwdCheck) {
-          alert('비밀번호가 일치하지 않습니다.');
-        }else {
-          addCard();
+        const pwd = $("#pwd").val();
+        const pwdCheck = $("#pwdCheck").val();
+        if (pwd !== pwdCheck) {
+          alert("비밀번호가 일치하지 않습니다.");
+        } else {
+          add_card();
         }
       }
 
@@ -299,8 +364,8 @@
         </button>
       </div>
       <div class="container" id="rows-container">
-        <div class="row">
-          <div class="col-lg-3">
+        <div class="row" id="card-rows">
+          <!-- <div class="col-lg-3">
             <svg
               class="bd-placeholder-img rounded-circle"
               width="140"
@@ -327,7 +392,6 @@
               <a class="btn btn-secondary" id="detail-btn-1">View details »</a>
             </p>
           </div>
-          <!-- /.col-lg-3 -->
           <div class="col-lg-3">
             <svg
               class="bd-placeholder-img rounded-circle"
@@ -355,7 +419,6 @@
               <a class="btn btn-secondary" id="detail-btn-2">View details »</a>
             </p>
           </div>
-          <!-- /.col-lg-3 -->
           <div class="col-lg-3">
             <svg
               class="bd-placeholder-img rounded-circle"
@@ -383,7 +446,6 @@
               <a class="btn btn-secondary" id="detail-btn-3">View details »</a>
             </p>
           </div>
-          <!-- /.col-lg-3 -->
           <div class="col-lg-3">
             <svg
               class="bd-placeholder-img rounded-circle"
@@ -445,13 +507,8 @@
       </div>
     </div>
 
-    <!-- Button trigger modal -->
-    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
-      Launch demo modal
-    </button> -->
-
-    <!-- Modal -->
-    <div
+  -->
+     <div
       class="modal fade"
       id="addModal"
       tabindex="-1"
@@ -523,7 +580,6 @@
               />
             </div>
 
-            <!--파일 업로드로 수정하는게 좋을것 같음-->
             <div class="input-group mb-3">
               <span class="input-group-text">이미지 주소</span>
               <input
