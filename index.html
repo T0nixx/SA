@@ -18,50 +18,66 @@
     ></script>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap");
+  
       body {
         margin: 0;
       }
-
+  
       .header {
-        background-color: #e1e5b6;
-        height: 100px;
+        padding-top: 40px;
+        padding-left: 3px;
+        background-color: #ffffff;
+        height: 90px;
         align-items: center;
         justify-content: center;
         display: flex;
       }
-      .header > div {
-        color: #426b1f;
+  
+      .header>div {
+        color: #000000;
         font-family: "Newsreader", serif;
         font-size: 3rem;
       }
-
+  
       .main {
         display: flex;
         flex-direction: column;
+        position: relative;
       }
+  
       #myCarousel {
-        width: 100%;
+        width: 80%;
         height: 512px;
+        margin-top: 40px;
+        margin-bottom: 60px;
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: center;
+        align-items: center;
+        background-color: #000000;
       }
-
+  
       .carousel-caption {
         top: 1.5rem;
         text-align: center !important;
       }
-      .carousel-caption > h1 {
+  
+      .carousel-caption>h1 {
         margin-bottom: 3rem;
       }
+  
       #rows-container {
         display: flex;
         justify-content: center;
         width: 70vw;
       }
+  
       .row {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         justify-items: center;
       }
-
+  
       .col-lg-3 {
         text-align: center;
         border-style: solid;
@@ -71,11 +87,21 @@
         margin: 10px;
         width: 80%;
       }
-
+  
+      .bar {
+        width: 210px;
+        height: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 0px;
+        background-color: black;
+      }
+  
       .fw-normal {
         margin-top: 2rem;
       }
     </style>
+  
     <script type="module">
       // Import the functions you need from the SDKs you need
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
@@ -155,6 +181,7 @@
   </head>
   <body>
     <div class="header"><div>INT's</div></div>
+    <div class="bar"></div>
     <div class="main">
       <div id="myCarousel" class="carousel slide mb-6">
         <div class="carousel-indicators">
@@ -192,7 +219,7 @@
               preserveAspectRatio="xMidYMid slice"
               focusable="false"
             >
-              <rect width="100%" height="100%" fill="#a7acb1"></rect>
+              <rect width="100%" height="100%" fill="#F51616"></rect>
             </svg>
             <div class="container">
               <div class="carousel-caption text-start">
@@ -215,7 +242,7 @@
               preserveAspectRatio="xMidYMid slice"
               focusable="false"
             >
-              <rect width="100%" height="100%" fill="#a7acb1"></rect>
+              <rect width="100%" height="100%" fill="#F0F831"></rect>
             </svg>
             <div class="container">
               <div class="carousel-caption">
@@ -238,7 +265,7 @@
               preserveAspectRatio="xMidYMid slice"
               focusable="false"
             >
-              <rect width="100%" height="100%" fill="#a7acb1"></rect>
+              <rect width="100%" height="100%" fill="#4031F8"></rect>
             </svg>
             <div class="container">
               <div class="carousel-caption text-end">
