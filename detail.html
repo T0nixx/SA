@@ -26,8 +26,8 @@
     }
 
     .pass {
-        text-align: center;
-        color: #000;
+      text-align: center;
+      color: #000;
     }
 
     .header {
@@ -184,15 +184,12 @@
       addDoc,
       query,
       where,
+      doc
     } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
     let current_href = window.location.href;
     let href = current_href.split("/").slice(-1)[0]
     let newHref = href.split("=")
     let params = decodeURIComponent(newHref[1])
-
-
-
-
 
     const firebaseConfig = {
       apiKey: "AIzaSyBym678ZRXfWjzc5Us-JTMV9ljzXLgtM4I",
@@ -208,37 +205,91 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    //  홈페이지 접속 시 데이터 보이기
+    const q = query(collection(db, "cards"), where("__name__", "==", `${params}`));
+    console.log(collection(db,"cards"))
+    // let image = $('#image').val()
+    // let title = $('#title').val()
+    // let content = $('#content').val()
+    // let date = $('#date').val()
+    //
+    // let doc = {
+    //   image : image,
+    //   title : title,
+    //   content :content,
+    //   date :date
+    // }
 
-    $("#save").click(async function () {
-      // let image = $('#image').val()
-      // let title = $('#title').val()
-      // let content = $('#content').val()
-      // let date = $('#date').val()
-      //
-      // let doc = {
-      //   image : image,
-      //   title : title,
-      //   content :content,
-      //   date :date
-      // }
-      // let data = await getDocs(collection(db, "cards"));
-      // data.forEach((doc) => {
-      //   console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-      // })
+    let data = await getDocs(q);
+    data.forEach((doc) => {
+      console.log(doc.data())
+      let data =doc.data()
+      let tempHtml = ` <div class="card mb-3 detail" >
+                       <div class="row g-0">
+                            <div class="col-md-4">
+                                 <img src= ${data.image}
+             width="300" height="350" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <hr>
+          <h3 class="card-title">${data.name}</h3>
+          <hr>
+          <h5 class="card-text"> MBTI : ${data.mbti}</h5>
+          <hr>
+          <p class="card-text">나만의 장점 : ${data.strength}</p>
+          <hr>
+          <p class="card-text">자신의 스타일 : ${data.style}</p>
+          <hr>
+          <p class="card-text">블로그 : <a id="a" class="card-text"
+                                        href= ${data.blog}
+                                        target="_blank">${data.blog}</a></p>
+          <hr>
+          <div class="update">
+            <input class="pass" type="password" placeholder="비밀번호" id="password">
+            <button type="button" class="btn btn-danger" id="update">수정하기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card mb-3 detail update-modal" id="update_modal" style="margin-left: 540px">
+    <div class="row g-0">
+      <div class="col-md-8">
+        <div class="card-body update-modal-content">
+          <hr>
+          <h3 class="card-text">이름 : <input type="text" placeholder=${data.name}></h3>
+          <hr>
+          <h5 class="card-text"> MBTI : <input type="text" placeholder=${data.mbti}></h5>
+          <hr>
+          <p class="card-text">나만의 장점 : <input type="text" placeholder=${data.strength}></p>
+          <hr>
+          <p class="card-text">자신의 스타일 : <input type="text" placeholder=${data.style}></p>
+          <hr>
+          <p class="card-text">블로그 : <input type="text" placeholder=${data.blog}></p>
+          <hr>
+          <p class="card-text">이미지 : <input type="text" placeholder=${data.image}></p>
+          <hr>
+        </div>
+        <div class="update-modal-content-button">
+          <button type="button" class="btn btn-danger" id="save">저장하기</button>
+        </div>
+      </div>
+    </div>
+  </div>`
+      $('#detail_page').append(tempHtml)
     })
 
-    let tempHtml = `<p>hello</p>`
 
-    $('#detail_page').append(tempHtml)
 
     let isModal = false
     let updateModal = $("#update_modal")
 
+    //모달 띄우기 & 닫기
     $("#update").click(async function (){
       if(!$("#password").val()) {
         alert("비밀번호를 입력해주세요")
       }else{
-        const q = query(collection(db, "cards"), where("name", "==", `${params}`));
         try{
           let data = await getDocs(q);
           let pw = ""
@@ -269,6 +320,7 @@
 
     })
 
+    //저장 & 모달 닫기
     $("#save").click(async function (){
       if(isModal === false){
         isModal = true
@@ -287,61 +339,10 @@
   <div>INT's</div>
 </div>
 <div class="bar"></div>
-<div class="main grid-container" id="detail_page">
-  <div class="card mb-3 detail" >
-    <div class="row g-0">
-      <div class="col-md-4">
-        <img src="https://postfiles.pstatic.net/MjAyNDA0MTZfNzgg/MDAxNzEzMjU3MDA1Mjcw.RRJD3mrFPYCIPizm_hbXKBzeGJMBCKpin9MzDZWwmz8g.mG5Gt9mTMyIpRnrkhU7sltZ6sUT-ZzlYTPuZcULWN4Ug.JPEG/KakaoTalk_20240416_174058966dd.jpg?type=w966"
-             width="300" height="350" class="img-fluid rounded-start" alt="...">
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <hr>
-          <h3 class="card-title">김태완</h3>
-          <hr>
-          <h5 class="card-text"> MBTI : INTJ</h5>
-          <hr>
-          <p class="card-text">나만의 장점 : 남의 말에 휘둘리지 않는 자존감</p>
-          <hr>
-          <p class="card-text">자신의 스타일 : 깔끔하고 심플한 것을 선호</p>
-          <hr>
-          <p class="card-text">블로그 : <a id="a" class="card-text"
-                                        href="https://blog.naver.com/kangbaekho10s"
-                                        target="_blank">https://blog.naver.com/kangbaekho10s</a></p>
-          <hr>
-          <div class="update">
-            <input class="pass" type="password" placeholder="비밀번호" id="password">
-            <button type="button" class="btn btn-danger" id="update">수정하기</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="card mb-3 detail update-modal" id="update_modal" style="margin-left: 540px">
-    <div class="row g-0">
-      <div class="col-md-8">
-        <div class="card-body update-modal-content">
-          <hr>
-          <h3 class="card-text">이름 : <input type="text" placeholder="변경 전 이름"/></h3>
-          <hr>
-          <h5 class="card-text"> MBTI : <input type="text" placeholder="변경 전 MBTI"></h5>
-          <hr>
-          <p class="card-text">나만의 장점 : <input type="text" placeholder="장점"></p>
-          <hr>
-          <p class="card-text">자신의 스타일 : <input type="text" placeholder="스타일"></p>
-          <hr>
-          <p class="card-text">블로그 : <input type="text" placeholder="스타일"></p>
-          <hr>
-          <p class="card-text">이미지 : <input type="text" placeholder="이미지 주소"></p>
-          <hr>
-        </div>
-        <div class="update-modal-content-button">
-          <button type="button" class="btn btn-danger" id="save">저장하기</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="main grid-container" >
+  <div class="main grid-container" id="detail_page">
 
+  </div>
   <div class="container" id="rows-container">
     <div class="row" style="width: 1500px">
       <div class="col-lg-3">
@@ -393,3 +394,4 @@
 </body>
 
 </html>
+
