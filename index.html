@@ -101,7 +101,7 @@
         margin-top: 2rem;
       }
 
-      .uuid {
+      .uid {
         display: none;
       }
     </style>
@@ -116,7 +116,7 @@
         addDoc,
       } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-      function make_card(name, image, count, uuid) {
+      function make_card(name, image, count, uid) {
         return `<div class="col-lg-3">
             <img height=140 width= 140 src="${image}" alt="...">
             <h2 class="fw-normal" id="card-${count}">${name}</h2>
@@ -127,7 +127,7 @@
             <p>
               <a class="btn btn-secondary" id="detail-btn-${count}">View details »</a>
             </p>
-            <p class="uuid">${uuid}</p>
+            <p class="uid">${uid}</p>
           </div>`;
       }
 
@@ -153,23 +153,23 @@
         card_rows.append(temp_html);
       });
 
-      let detail_btn_click = (uuid)=> () => {
+      let detail_btn_click = (uid)=> () => {
         let current_href = window.location.href;
         if (current_href.split("/").slice(-1)[0].includes("html")) {
           window.location =
             current_href.split("/").slice(0, -1).join("/") +
-            "/detail.html?uuid=" +
-            uuid;
+            "/detail.html?uid=" +
+            uid;
         } else {
-          window.location = current_href + "detail.html?uuid=" + uuid;
+          window.location = current_href + "detail.html?uid=" + uid;
         }
       }
 
       Array.from(card_rows.children()).forEach((card, i) => {
-        let uuid = card.getElementsByClassName("uuid");
+        let uid = card.getElementsByClassName("uid");
         if (i == 0) return
         // onclick은 parameter를 넘겨줄 수 없어서 커링으로 일단 인자를 받도록 함
-        card.onclick=detail_btn_click(card.getElementsByClassName("uuid")[0].textContent);
+        card.onclick=detail_btn_click(card.getElementsByClassName("uid")[0].textContent);
       })
 
       const add_card_form = `<div class="col-lg-3">
