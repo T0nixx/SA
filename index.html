@@ -95,9 +95,13 @@
       background-color: black;
     }
 
-    .weather {
-      width: 50px;
-      height: 50px;
+    #weatherContainer {
+      position: absolute;
+      right: 10rem;
+    }
+
+    #weather {
+      font-size: medium;
     }
 
 
@@ -270,12 +274,36 @@
       window.location.reload();
     };
 
+    //날씨 API
+    navigator.geolocation.getCurrentPosition((position) => {
+
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      const apiKey = '9dc6fb05dead7932a8b331bf4b8a150b';
+
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=kr`)
+      .then(res => res.json())
+      .then(data => {
+        const temp = data['main']['temp'].toFixed(1);
+        const icon = data['weather'][0]['icon']
+        const iconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+
+        $('#temp').text(temp);
+        $('#weatherIcon').attr('src', iconUrl);
+      })
+    });
+
   </script>
 </head>
 
 <body>
   <div class="header">
     <div>INT's</div>
+    <div id="weatherContainer">
+      <div id="weather">
+        현재 날씨 : <span id="temp"></span>°C <img id="weatherIcon" src="">
+      </div>
+    </div>
   </div>
   <div class="bar"></div>
   <div class="main">
