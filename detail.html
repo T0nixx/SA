@@ -278,6 +278,7 @@
         </div>
         <div class="update-modal-content-button">
           <button type="button" class="btn btn-danger" id="save">저장하기</button>
+          <button type="button" class="btn btn-danger" id="close" style="margin-left: 20px">닫기</button>
         </div>
       </div>
     </div>
@@ -363,6 +364,19 @@
           console.error(e)
         }
       }
+
+    })
+
+      //닫기
+    $("#close").click(async function (){
+      if(isModal === true){
+            isModal = false
+            $("#update_modal").css("opacity", 0)
+            updateModal.css("pointer-events", "none")
+          }
+
+
+
 
     })
 
