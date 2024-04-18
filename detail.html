@@ -205,7 +205,7 @@
       width: 500px;
     }
 
-     .badge {
+    .badge {
       position: absolute;
       right: 10px;
       top: 10px;
@@ -391,23 +391,23 @@
 
     })
 
-      //닫기
+    //닫기
     $("#close").click(async function (){
       if(isModal === true){
-            isModal = false
-            $("#update_modal").css("opacity", 0)
-            updateModal.css("pointer-events", "none")
-          }
+        isModal = false
+        $("#update_modal").css("opacity", 0)
+        updateModal.css("pointer-events", "none")
+      }
 
 
 
 
     })
 
-     function make_card(name, image, uid, isMember) {
+    function make_card(name, image, uid, isMember) {
       const badge = isMember ? `<span class="badge text-bg-primary">팀원</span>` : ``;
 
-      return `<div class="col-lg-3">`
+      return `<div class="col-lg-3" style="margin-top: 10px">`
         + badge +
         `<img height=140 width= 140 src="${image}" alt="...">
             <h2 class="fw-normal">${name}</h2>
@@ -418,14 +418,14 @@
           </div>`;
     }
     //아래 카드 보여주기
-  const querySnapshot = await getDocs(
+    const querySnapshot = await getDocs(
       query(collection(db, "cards"), orderBy("creationTimestamp"))
     );
 
     const card_rows = $("#card-rows");
     querySnapshot.forEach((doc) => {
-       const { name, image, mbti, isMember } = doc.data();
-      const temp_html = make_card(name, image, doc.id, mbti, isMember);
+      const { name, image, isMember } = doc.data();
+      const temp_html = make_card(name, image, doc.id, isMember);
       card_rows.append(temp_html);
     });
 
@@ -464,21 +464,21 @@
     //날씨 API
     navigator.geolocation.getCurrentPosition((position) => {
 
-const lat = position.coords.latitude;
-const lon = position.coords.longitude;
-const apiKey = '9dc6fb05dead7932a8b331bf4b8a150b';
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      const apiKey = '9dc6fb05dead7932a8b331bf4b8a150b';
 
-fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=kr`)
-.then(res => res.json())
-.then(data => {
-  const temp = data['main']['temp'].toFixed(1);
-  const icon = data['weather'][0]['icon']
-  const iconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=kr`)
+        .then(res => res.json())
+        .then(data => {
+          const temp = data['main']['temp'].toFixed(1);
+          const icon = data['weather'][0]['icon']
+          const iconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
 
-  $('#temp').text(temp);
-  $('#weatherIcon').attr('src', iconUrl);
-})
-});
+          $('#temp').text(temp);
+          $('#weatherIcon').attr('src', iconUrl);
+        })
+    });
   </script>
 </head>
 
