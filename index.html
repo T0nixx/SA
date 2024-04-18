@@ -28,7 +28,7 @@
       display: flex;
     }
 
-    .header>div {
+    .header div {
       color: #000000;
       font-family: "Newsreader", serif;
       font-size: 3rem;
@@ -80,6 +80,13 @@
       padding: 2rem 0.5rem;
       margin: 10px;
       width: 90%;
+      position: relative;
+    }
+
+    .badge {
+      position: absolute;
+      right: 10px;
+      top: 10px;
     }
 
     .col-lg-3>img {
@@ -130,9 +137,13 @@
       orderBy,
     } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    function make_card(name, image, uid) {
-      return `<div class="col-lg-3">
-            <img height=140 width= 140 src="${image}" alt="...">
+    function make_card(name, image, uid, isMember) {
+
+      const badge = isMember ? `<span class="badge text-bg-primary">팀원</span>` : ``;
+
+      return `<div class="col-lg-3">`
+            + badge + 
+            `<img height=140 width= 140 src="${image}" alt="...">
             <h2 class="fw-normal">${name}</h2>
             <p>
               And lastly this, the third column of representative placeholder
@@ -164,8 +175,8 @@
     );
     const card_rows = $("#card-rows");
     querySnapshot.forEach((doc) => {
-      const { name, image } = doc.data();
-      const temp_html = make_card(name, image, doc.id);
+      const { name, image, isMember } = doc.data();
+      const temp_html = make_card(name, image, doc.id, isMember);
       card_rows.append(temp_html);
     });
 
@@ -248,7 +259,7 @@
       let card_rows = $("#card-rows");
       const cards_cnt = card_rows.children().length;
 
-      let temp_html = make_card(name, image, docref.id);
+      let temp_html = make_card(name, image, docref.id, false);
 
       card_rows.children().last().remove();
       card_rows.append(temp_html);
