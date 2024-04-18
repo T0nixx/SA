@@ -147,6 +147,14 @@
       .uid {
         display: none;
       }
+
+      h3 b {
+        color: #C5FF95;
+      }
+
+      #introContent {
+        padding-top: 6rem;
+      }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="module">
@@ -173,7 +181,7 @@
             <h2 class="fw-normal">${name}</h2>
             <p>${mbti}</p>
             <p>
-              <a class="btn btn-secondary detail-btn">View details »</a>
+              <a class="btn btn-secondary detail-btn">상세보기 »</a>
             </p>
             <p class="uid">${uid}</p>
           </div>`
@@ -381,10 +389,9 @@
             <div class="container">
               <div class="carousel-caption text-start">
                 <h1>팀 소개</h1>
-                <h3>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  mattis fringilla commodo. Donec at magna in lorem vehicula
-                  tempus ullamcorper id leo.
+                <h3 id="introContent">
+                  <div><b>INT</b>J <b>INT</b>P <b>INT</b>P <b>INT</b>P</div>
+                  <div>안녕하세요 저희는 <b>INT</b>X 4명으로 이루어진 팀 <b>INT’S</b> 입니다.</div>
                 </h3>
               </div>
             </div>
