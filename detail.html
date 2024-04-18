@@ -96,6 +96,7 @@
       border-radius: 5px;
       padding: 2rem 0.5rem;
       width: 24%;
+      position: relative;
     }
 
     .fw-normal {
@@ -202,6 +203,12 @@
 
     .card-text{
       width: 500px;
+    }
+
+     .badge {
+      position: absolute;
+      right: 10px;
+      top: 10px;
     }
   </style>
   <script type="module">
@@ -397,9 +404,12 @@
 
     })
 
-    function make_card(name, image, uid) {
-      return `<div class="col-lg-3" style="margin-top: 20px">
-            <img height=140 width= 140 src="${image}" alt="...">
+     function make_card(name, image, uid, isMember) {
+      const badge = isMember ? `<span class="badge text-bg-primary">팀원</span>` : ``;
+
+      return `<div class="col-lg-3">`
+        + badge +
+        `<img height=140 width= 140 src="${image}" alt="...">
             <h2 class="fw-normal">${name}</h2>
             <p>
               <a class="btn btn-secondary detail-btn">View details »</a>
@@ -415,7 +425,7 @@
     const card_rows = $("#card-rows");
     querySnapshot.forEach((doc) => {
       const { name, image } = doc.data();
-      const temp_html = make_card(name, image, doc.id);
+      const temp_html = make_card(name, image, doc.id, isMember);
       card_rows.append(temp_html);
     });
 
