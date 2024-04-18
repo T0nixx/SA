@@ -91,6 +91,7 @@
 
     .col-lg-3>img {
       border-radius: 50%;
+      margin: auto 4rem auto 4rem;
     }
 
     .bar {
@@ -137,7 +138,7 @@
       orderBy,
     } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    function make_card(name, image, uid, isMember) {
+    function make_card(name, image, uid, mbti, isMember) {
 
       const badge = isMember ? `<span class="badge text-bg-primary">팀원</span>` : ``;
 
@@ -145,10 +146,7 @@
             + badge + 
             `<img height=140 width= 140 src="${image}" alt="...">
             <h2 class="fw-normal">${name}</h2>
-            <p>
-              And lastly this, the third column of representative placeholder
-              content.
-            </p>
+            <p>${mbti}</p>
             <p>
               <a class="btn btn-secondary detail-btn">View details »</a>
             </p>
@@ -175,8 +173,8 @@
     );
     const card_rows = $("#card-rows");
     querySnapshot.forEach((doc) => {
-      const { name, image, isMember } = doc.data();
-      const temp_html = make_card(name, image, doc.id, isMember);
+      const { name, image, mbti, isMember } = doc.data();
+      const temp_html = make_card(name, image, doc.id, mbti, isMember);
       card_rows.append(temp_html);
     });
 
@@ -259,7 +257,7 @@
       let card_rows = $("#card-rows");
       const cards_cnt = card_rows.children().length;
 
-      let temp_html = make_card(name, image, docref.id, false);
+      let temp_html = make_card(name, image, docref.id, mbti, false);
 
       card_rows.children().last().remove();
       card_rows.append(temp_html);
