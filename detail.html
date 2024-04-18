@@ -408,28 +408,32 @@
       query(collection(db, "cards"), orderBy("creationTimestamp"))
     );
 
-    let newUid = ""
     const card_rows = $("#card-rows");
     querySnapshot.forEach((doc) => {
       const { name, image } = doc.data();
       const temp_html = make_card(name, image, doc.id);
-      newUid = doc.id
       card_rows.append(temp_html);
     });
 
-    let detail_btn_click = (newUid) => () => {
+    let detail_btn_click = (uid) => () => {
 
       let current_href = window.location.href;
       if (current_href.split("/").slice(-1)[0].includes("html")) {
         window.location =
           current_href.split("/").slice(0, -1).join("/") +
           "/detail.html?uid=" +
-          `${$('#uid').val()}`;
+          uid;
       } else {
-        window.location = current_href + "?uid=" + `${$('#uid').val()}`;
+        window.location = current_href + "?uid=" + uid;
       }
     };
-    card_rows.children().click(detail_btn_click(newUid));
+
+    Array.from(card_rows.children()).forEach((card) => {
+      let uid = card.getElementsByClassName("uid")[0].value;
+      let detail_button = card.getElementsByClassName("detail-btn")[0];
+      // onclick은 parameter를 넘겨줄 수 없어서 커링으로 일단 인자를 받도록 함
+      detail_button.onclick = detail_btn_click(uid);
+    });
 
     document.querySelector(".header > div").onclick = () => {
       if (window.location.pathname.split("/").slice(-1)[0].includes("html")) {
