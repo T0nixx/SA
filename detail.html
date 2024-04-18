@@ -403,6 +403,17 @@
     };
     card_rows.children().click(detail_btn_click(newUid));
 
+    document.querySelector(".header > div").onclick = () => {
+      if (window.location.pathname.split("/").slice(-1)[0].includes("html")) {
+        window.location.href =
+          window.location.origin +
+          window.location.pathname.split("/").slice(0, -1).join("/") +
+          "/";
+      } else {
+        window.location.href = window.location.origin;
+      }
+    };
+
 
     //날씨 API
     navigator.geolocation.getCurrentPosition((position) => {
