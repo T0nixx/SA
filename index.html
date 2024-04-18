@@ -75,12 +75,20 @@
       }
 
       .carousel-caption > h3 {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
       }
 
       .carousel-caption > h3 > li {
         font-size: smaller;
         margin-top: 5px;
+      }
+
+      .carousel-caption-cotent {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        height: 80%;
       }
 
       #rows-container {
@@ -149,7 +157,7 @@
       }
 
       h3 b {
-        color: #C5FF95;
+        color: #c5ff95;
       }
 
       #introContent {
@@ -391,7 +399,10 @@
                 <h1>팀 소개</h1>
                 <h3 id="introContent">
                   <div><b>INT</b>J <b>INT</b>P <b>INT</b>P <b>INT</b>P</div>
-                  <div>안녕하세요 저희는 <b>INT</b>X 4명으로 이루어진 팀 <b>INT’S</b> 입니다.</div>
+                  <div>
+                    안녕하세요 저희는 <b>INT</b>X 4명으로 이루어진 팀
+                    <b>INT’S</b> 입니다.
+                  </div>
                 </h3>
               </div>
             </div>
@@ -411,10 +422,12 @@
             <div class="container">
               <div class="carousel-caption">
                 <h1>팀 목표</h1>
-                <h3>1. 매일 계획한 일정 소화하기</h3>
-                <h3>2. 부끄러워도 팀원들과 튜터님들께 질문하기</h3>
-                <h3>3. 이번 프로젝트 포트폴리오로 사용하기</h3>
-                <h3>4. TIL 매일 작성하기</h3>
+                <div class="carousel-caption-cotent">
+                  <h3>1. 매일 계획한 일정 소화하기</h3>
+                  <h3>2. 부끄러워도 팀원들과 튜터님들께 질문하기</h3>
+                  <h3>3. 이번 프로젝트 포트폴리오로 사용하기</h3>
+                  <h3>4. TIL 매일 작성하기</h3>
+                </div>
               </div>
             </div>
           </div>
@@ -433,28 +446,30 @@
             <div class="container">
               <div class="carousel-caption text-end">
                 <h1>팀 시간 약속</h1>
-                <h3>
-                  오전
-                  <li>09:30 ~ 10:00 : 데일리 스크럼</li>
-                  <li>10:00 ~ 10:30 : 알고리즘 학습 1일 1문제 목표!</li>
-                </h3>
-                <h3>
-                  오후
-                  <li>
-                    14:00 ~ 18:00 : 집중 코딩 시간<br />
-                    개별 코딩 작성 (모르는 부분은 팀원들과의 토론을 통해 해결)
-                  </li>
-                </h3>
-                <h3>
-                  저녁
-                  <li>
-                    20:00 ~ 20:30 : 하루 회고 진행 (개인별 진척도 및 체크리스트
-                    확인)
-                  </li>
-                  <li>
-                    20:30 ~ 21:00 : TIL 작성, 자기 피드백 및 다음날 일정 확인
-                  </li>
-                </h3>
+                <div class="carousel-caption-cotent">
+                  <h3>
+                    오전
+                    <li>09:30 ~ 10:00 : 데일리 스크럼</li>
+                    <li>10:00 ~ 10:30 : 알고리즘 학습 1일 1문제 목표!</li>
+                  </h3>
+                  <h3>
+                    오후
+                    <li>
+                      14:00 ~ 18:00 : 집중 코딩 시간<br />
+                      개별 코딩 작성 (모르는 부분은 팀원들과의 토론을 통해 해결)
+                    </li>
+                  </h3>
+                  <h3>
+                    저녁
+                    <li>
+                      20:00 ~ 20:30 : 하루 회고 진행 (개인별 진척도 및
+                      체크리스트 확인)
+                    </li>
+                    <li>
+                      20:30 ~ 21:00 : TIL 작성, 자기 피드백 및 다음날 일정 확인
+                    </li>
+                  </h3>
+                </div>
               </div>
             </div>
           </div>
