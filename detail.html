@@ -424,8 +424,8 @@
 
     const card_rows = $("#card-rows");
     querySnapshot.forEach((doc) => {
-      const { name, image } = doc.data();
-      const temp_html = make_card(name, image, doc.id, isMember);
+       const { name, image, mbti, isMember } = doc.data();
+      const temp_html = make_card(name, image, doc.id, mbti, isMember);
       card_rows.append(temp_html);
     });
 
